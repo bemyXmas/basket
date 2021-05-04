@@ -3,13 +3,14 @@ from random import randint
 
 from consts import *
 
+
 def direction_to_dxdy(direction):
-    return (math.cos(direction * math.pi / 180), 
-        math.sin(direction * math.pi / 180))
+    return (math.cos(direction * math.pi / 180),
+            math.sin(direction * math.pi / 180))
 
 
-def vector_len(x,y):
-    return math.sqrt(x*x + y*y)
+def vector_len(x, y):
+    return math.sqrt(x * x + y * y)
 
 
 def distance(x1, y1, x2, y2):

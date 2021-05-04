@@ -7,6 +7,7 @@ from gamelib import Sprite, GameApp, Text
 
 from consts import *
 
+
 class SlowFruit(Sprite):
     def __init__(self, app, x, y):
         super().__init__(app, 'images/apple.png', x, y)
@@ -38,7 +39,7 @@ class SlideFruit(Sprite):
         super().__init__(app, 'images/cherry.png', x, y)
 
         self.app = app
-        self.direction = randint(0,1)*2 - 1
+        self.direction = randint(0, 1) * 2 - 1
 
     def update(self):
         self.y += FRUIT_FAST_SPEED
@@ -53,12 +54,12 @@ class CurvyFruit(Sprite):
         super().__init__(app, 'images/pear.png', x, y)
 
         self.app = app
-        self.t = randint(0,360) * 2 * math.pi / 360
+        self.t = randint(0, 360) * 2 * math.pi / 360
 
     def update(self):
         self.y += FRUIT_SLOW_SPEED * 1.2
         self.t += 1
-        self.x += math.sin(self.t*0.08)*10
+        self.x += math.sin(self.t * 0.08) * 10
 
         if self.y > CANVAS_WIDTH + 30:
             self.to_be_deleted = True
@@ -70,6 +71,7 @@ class Basket(Sprite):
 
         self.app = app
         self.direction = None
+        self.fruit_collect_observers = []
 
     def update(self):
         if self.direction == BASKET_LEFT:
@@ -94,6 +96,11 @@ class BasketGame(GameApp):
         self.score = 0
         self.score_text = Text(self, 'Score: 0', 100, 40)
         self.fruits = []
+        self.basket.fruit_collect_observers.append(lambda: self.fruit_collect_basket())
+
+    def fruit_collect_basket(self):
+        self.score += 1
+        self.update_score()
 
     def update_score(self):
         self.score_text.set_text('Score: ' + str(self.score))
@@ -140,12 +147,12 @@ class BasketGame(GameApp):
             self.basket.direction = BASKET_LEFT
         elif event.keysym == 'Right':
             self.basket.direction = BASKET_RIGHT
-    
+
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Basket Fighter")
- 
+
     # do not allow window resizing
     root.resizable(False, False)
     app = BasketGame(root, CANVAS_WIDTH, CANVAS_HEIGHT, UPDATE_DELAY)
